@@ -118,9 +118,9 @@ While making UI changes, I recommend the following procedure:
 `kubectl cp ui/src $(kubectl get pods|awk '/feature/{print$1}'):/ui/`
 4. Open a terminal in the container as detailed above.
 5. Build the UI with
-`(cd /ui && npm run build)
+`(cd /ui && npm run build)`
 6. Copy to static files location:
-`cp -r /ui/build/\* /var/www/frontend/
+`cp -r /ui/build/\* /var/www/frontend/`
 
 For backend code changes, you can follow a similar procedure, except you don't need to recompile the code, the server
 is listening for code changes, by default.
