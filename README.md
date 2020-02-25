@@ -70,7 +70,7 @@ Push image to dockerhub:
 `sudo docker push <docker_username>/<app_name>`
 
 The machine already has docker credentials for the columbustech account, so you could just do:
-`sudo docke push columbustech/feature-gen`
+`sudo docker push columbustech/feature-gen`
 
 ### Installing the app
 
@@ -94,7 +94,7 @@ receive an authentication token in response. The POST request is made over Kuber
 The app will store the authentication token in the browser cookies. The token enables the app to access a user's CDrive
 files (for which it has access permissions). Note that the code for this is already present, you can directly use the
 authentication token to access CDrive files and make other API calls to CDrive. You can take a look at other CDrive
-apps such as [Fahes MVD](https://www.github.com/columbustech/fahes-mvc) or 
+apps such as [Fahes MVD](https://www.github.com/columbustech/fahes-mvd) or 
 [GLM numerical mode](https://www.github.com/columbustech/glm-numerical-model) to see how this is done.
 
 ### Accessing the app
