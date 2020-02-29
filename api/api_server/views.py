@@ -32,9 +32,9 @@ class Save(APIView):
         output_path = request.data['output_path']
         auth_header = request.META['HTTP_AUTHORIZATION']
 
-        glm_out_path = '/storage/glm/output'
-        for file_name in os.listdir(glm_out_path):
-            file_path = glm_out_path + '/' + file_name
+        feature_gen_out_path = '/storage/feature-gen/output'
+        for file_name in os.listdir(feature_gen_out_path):
+            file_path = feature_gen_out_path + '/' + file_name
             f = open(file_path, 'rb')
             file_arg = {'file': (file_name, f), 'path': (None, output_path)}
             requests.post(os.environ['CDRIVE_API_URL'] + 'upload/', files=file_arg, headers={'Authorization': auth_header})
