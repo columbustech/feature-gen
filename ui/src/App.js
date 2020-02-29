@@ -134,16 +134,16 @@ class App extends React.Component {
         case 0:
           component = (
             <CDrivePathSelector specs={this.state.specs} primaryFn={this.onInputSelect} 
-              primaryBtn={"Simulate Model"} secondaryFn={this.backToCDrive} secondaryBtn={"Go back to CDrive"} />
+              primaryBtn={"Simulate Model"} />
           );
           header = (
-            <h1 className="h3 mb-3 font-weight-light">Choose an {"input"} folder {"for"} GLM Simulator</h1>
+            <h1 className="h3 mb-3 font-weight-light">Choose an {"input"} folder {"for"} Feature Gen </h1>
           );
           break;
         case 1:
           component = (
             <CDrivePathSelector specs={this.state.specs} primaryFn={this.onOutputSelect}
-              primaryBtn={"Save to CDrive"} secondaryFn={this.previousStep} secondaryBtn={"Back"} />
+              primaryBtn={"Save to CDrive"} />
           );
           header = (
             <h1 className="h3 mb-3 font-weight-light">Choose CDrive {"location for"} saving output</h1>
