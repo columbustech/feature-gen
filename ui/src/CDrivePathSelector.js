@@ -20,7 +20,7 @@ class CDrivePathSelector extends React.Component {
   }
   getDriveObjects(path) {
     const cookies = new Cookies();
-    var auth_header = 'Bearer ' + cookies.get('glm_token');
+    var auth_header = 'Bearer ' + cookies.get('fg_token');
     const request = axios({
       method: 'GET',
       url: this.props.specs.cdriveApiUrl + "list/?path=" + path,
@@ -35,7 +35,7 @@ class CDrivePathSelector extends React.Component {
       },
       err => {
         if (err.response.status === 401) {
-          cookies.remove('glm_token');
+          cookies.remove('fg_token');
           window.location.reload(false);
         }
       }
