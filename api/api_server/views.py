@@ -22,7 +22,28 @@ def save_folder(input_path, storage_path, auth_header):
             response = requests.get(url=download_url)
             open(storage_path + '/' + dobj['name'], 'wb').write(response.content)
 
+class Execute(APIView):
+    parser_class = (JSONParser,)
 
+    @csrf_exempt
+    def post(self, request):
+        input_path = request.data['input_path']
+
+        auth_header = request.META['HTTP_AUTHORIZATION']
+
+        feature_gen_path = '/storage/feature-gen'
+        if os.path.exists(feature_gen_path):
+            shutil.rmtree(feature_gen_path)
+        os.mkdir(feature_gen_path)
+        save_folder(input_path, feature_gen_path, auth_header)
+
+        feature_gen_out_path = feature_gen_path + '/output'
+        os.mkdir(feature_gen_out_path)
+
+        #with open(feature_gen_out_path + '/out.txt', 'w') as f:
+        #   subprocess.call('/feature-gen_build/feature-gen', cwd=feature_gen_path, stdout=f)
+
+        return Response(status=status.HTTP_200_OK)
 
 class Save(APIView):
     parser_class = (JSONParser,)
