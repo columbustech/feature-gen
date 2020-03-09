@@ -103,7 +103,7 @@ You can open a terminal to the app pod with the following command from the EC2 m
 `kubectl exec -it $(kubectl get pods|awk '/feature/{print$1}') -- /bin/bash`
 
 Once inside the pod, you have access to the Kubernetes internal network. The Livy service is available at
-http://riotous-umbrella-bird-livy:8998 and the above mentioned oauth service is available at http://authentication.
+http://riotous-umbrellabird-livy:8998 and the above mentioned oauth service is available at http://authentication.
 
 You can list all services with:
 `kubectl get svc`
