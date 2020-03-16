@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 import os, shutil, requests, subprocess, time
-
+import json, pprint, requests, textwrap
 
 def save_folder(input_path, storage_path, auth_header):
     headers = {'Authorization': auth_header}
@@ -21,6 +21,23 @@ def save_folder(input_path, storage_path, auth_header):
             download_url = requests.get(url=url, headers=headers).json()['download_url'] 
             response = requests.get(url=download_url)
             open(storage_path + '/' + dobj['name'], 'wb').write(response.content)
+        
+def livy_add():
+    host = 'http://localhost:8998'
+    data = {'kind': 'spark'}
+    headers = {'Content-Type': 'application/json'}
+    r = requests.post(host + '/sessions', data=json.dumps(data), headers=headers)
+    r.json()
+    session_url = host + r.headers['location']
+    r = requests.get(session_url, headers=headers)
+    r.json()
+    statements_url = session_url + '/statements'
+    data = {'code': '1 + 1'}
+    r = requests.post(statements_url, data=json.dumps(data), headers=headers)
+    r.json()
+    statement_url = host + r.headers['location']
+    r = requests.get(statement_url, headers=headers)
+    pprint.pprint(r.json())
 
 class Execute(APIView):
     parser_class = (JSONParser,)
