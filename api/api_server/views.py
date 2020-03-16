@@ -58,7 +58,7 @@ class Execute(APIView):
         #   subprocess.call('/feature-gen_build/feature-gen', cwd=feature_gen_path, stdout=f)
         resp_livy = livy_add()
 
-        return Response(resp.livy, status=status.HTTP_200_OK)
+        return Response(resp_livy, status=status.HTTP_200_OK)
 
 class Save(APIView):
     parser_class = (JSONParser,)
