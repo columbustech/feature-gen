@@ -27,17 +27,17 @@ def livy_add():
         host = 'http://riotous-umbrellabird-livy:8998'                                                                        
         data = {'kind': 'spark'}                                                                                              
         headers = {'Content-Type': 'application/    json'}                                                                      
-        r = requests.post(host + '/sessions', data=json.dumps(data),    headers=headers)                                                                   
+        r = requests.post(host + '/sessions', data=json.dumps(data),    headers=headers)
+        session_url = host + r.headers['location'] 
+        r = requests.get(session_url, headers=headers)                                                                      
+        statements_url = session_url + '/statements'                                                                        
+        data = {'code': '1 + 1'}                                                                                            
+        r = requests.post(statements_url, data=json.dumps(data), headers=headers)                                           
+        statement_url = host + r.headers['location']                                                                        
+        r = requests.get(statement_url, headers=headers)                                                                    
+        return r.json()
     except:
         return r.json()
-    session_url = host + r.headers['location'] 
-    r = requests.get(session_url, headers=headers)                                                                      
-    statements_url = session_url + '/statements'                                                                        
-    data = {'code': '1 + 1'}                                                                                            
-    r = requests.post(statements_url, data=json.dumps(data), headers=headers)                                           
-    statement_url = host + r.headers['location']                                                                        
-    r = requests.get(statement_url, headers=headers)                                                                    
-    return r.json()
 
 class Execute(APIView):
     parser_class = (JSONParser,)
