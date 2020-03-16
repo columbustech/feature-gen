@@ -7,6 +7,8 @@ from rest_framework import status
 import os, shutil, requests, subprocess, time
 import json, pprint, requests, textwrap
 
+location = ''
+
 def save_folder(input_path, storage_path, auth_header):
     headers = {'Authorization': auth_header}
 
@@ -21,14 +23,25 @@ def save_folder(input_path, storage_path, auth_header):
             download_url = requests.get(url=url, headers=headers).json()['download_url'] 
             response = requests.get(url=download_url)
             open(storage_path + '/' + dobj['name'], 'wb').write(response.content)
+     
+def livy_initiliaze():
+    try:
+        host = 'http://riotous-umbrellabird-livy:8998'
+        data = {'kind': 'spark'}                                                                                              
+        headers = {'Content-Type': 'application/json'}                                                                      
+        r = requests.post(host + '/sessions', data=json.dumps(data), headers=headers)
+        global location
+        location = r.headers['location']
+        return r.json()
+    except:
+        return r.json()
         
 def livy_add():
     try:
-        host = 'http://riotous-umbrellabird-livy:8998'                                                                        
-        data = {'kind': 'spark'}                                                                                              
-        headers = {'Content-Type': 'application/    json'}                                                                      
-        r = requests.post(host + '/sessions', data=json.dumps(data),    headers=headers)
-        session_url = host + r.headers['location'] 
+        host = 'http://riotous-umbrellabird-livy:8998'                                                                                             
+        headers = {'Content-Type': 'application/json'}
+        global location
+        session_url = host + location
         r = requests.get(session_url, headers=headers)                                                                      
         statements_url = session_url + '/statements'                                                                        
         data = {'code': '1 + 1'}                                                                                            
@@ -99,6 +112,7 @@ class AuthenticationToken(APIView):
 
     @csrf_exempt
     def post(self, request, format=None):
+        resp_livy = livy_initialize()
         code = request.data['code']
         redirect_uri = request.data['redirect_uri']
         data = {
