@@ -37,7 +37,7 @@ def livy_add():
     #r.json()
     statement_url = host + r.headers['location']
     r = requests.get(statement_url, headers=headers)
-    pprint.pprint(r.json())
+    return Response(r.json(), status=status.HTTP_200_OK)
 
 class Execute(APIView):
     parser_class = (JSONParser,)
