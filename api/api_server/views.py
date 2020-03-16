@@ -7,7 +7,7 @@ from rest_framework import status
 import os, shutil, requests, subprocess, time
 import json, pprint, requests, textwrap
 
-location = ''
+location = None
 
 def save_folder(input_path, storage_path, auth_header):
     headers = {'Authorization': auth_header}
