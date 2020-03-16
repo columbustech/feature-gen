@@ -23,21 +23,18 @@ def save_folder(input_path, storage_path, auth_header):
             open(storage_path + '/' + dobj['name'], 'wb').write(response.content)
         
 def livy_add():
-    host = 'http://localhost:8998'
+    host = 'http://riotous-umbrellabird-livy:8998'
     data = {'kind': 'spark'}
     headers = {'Content-Type': 'application/json'}
     r = requests.post(host + '/sessions', data=json.dumps(data), headers=headers)
-    #r.json()
     session_url = host + r.headers['location']
     r = requests.get(session_url, headers=headers)
-    #r.json()
     statements_url = session_url + '/statements'
     data = {'code': '1 + 1'}
     r = requests.post(statements_url, data=json.dumps(data), headers=headers)
-    #r.json()
     statement_url = host + r.headers['location']
     r = requests.get(statement_url, headers=headers)
-    return Response(r.json(), status=status.HTTP_200_OK)
+    return r.json()
 
 class Execute(APIView):
     parser_class = (JSONParser,)
@@ -59,8 +56,9 @@ class Execute(APIView):
 
         #with open(feature_gen_out_path + '/out.txt', 'w') as f:
         #   subprocess.call('/feature-gen_build/feature-gen', cwd=feature_gen_path, stdout=f)
+        resp_livy = livy_add()
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(resp.livy, status=status.HTTP_200_OK)
 
 class Save(APIView):
     parser_class = (JSONParser,)
