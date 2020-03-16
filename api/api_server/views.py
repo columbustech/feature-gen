@@ -23,17 +23,20 @@ def save_folder(input_path, storage_path, auth_header):
             open(storage_path + '/' + dobj['name'], 'wb').write(response.content)
         
 def livy_add():
-    host = 'http://riotous-umbrellabird-livy:8998'
-    data = {'kind': 'spark'}
-    headers = {'Content-Type': 'application/json'}
-    r = requests.post(host + '/sessions', data=json.dumps(data), headers=headers)
-    session_url = host + r.headers['location']
-    r = requests.get(session_url, headers=headers)
-    statements_url = session_url + '/statements'
-    data = {'code': '1 + 1'}
-    r = requests.post(statements_url, data=json.dumps(data), headers=headers)
-    statement_url = host + r.headers['location']
-    r = requests.get(statement_url, headers=headers)
+    try:
+        host = 'http://riotous-umbrellabird-livy:8998'                                                                        
+        data = {'kind': 'spark'}                                                                                              
+        headers = {'Content-Type': 'application/    json'}                                                                      
+        r = requests.post(host + '/sessions', data=json.dumps(data),    headers=headers)                                       
+        session_url = host + r.headers['location']                               
+    except:
+        return r.json()
+    r = requests.get(session_url, headers=headers)                                                                      
+    statements_url = session_url + '/statements'                                                                        
+    data = {'code': '1 + 1'}                                                                                            
+    r = requests.post(statements_url, data=json.dumps(data), headers=headers)                                           
+    statement_url = host + r.headers['location']                                                                        
+    r = requests.get(statement_url, headers=headers)                                                                    
     return r.json()
 
 class Execute(APIView):
