@@ -27,10 +27,10 @@ def livy_add():
         host = 'http://riotous-umbrellabird-livy:8998'                                                                        
         data = {'kind': 'spark'}                                                                                              
         headers = {'Content-Type': 'application/    json'}                                                                      
-        r = requests.post(host + '/sessions', data=json.dumps(data),    headers=headers)                                       
-        session_url = host + r.headers['location']                               
+        r = requests.post(host + '/sessions', data=json.dumps(data),    headers=headers)                                                                   
     except:
         return r.json()
+    session_url = host + r.headers['location'] 
     r = requests.get(session_url, headers=headers)                                                                      
     statements_url = session_url + '/statements'                                                                        
     data = {'code': '1 + 1'}                                                                                            
