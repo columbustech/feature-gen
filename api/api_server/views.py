@@ -24,9 +24,9 @@ def save_folder(input_path, storage_path, auth_header):
             response = requests.get(url=download_url)
             open(storage_path + '/' + dobj['name'], 'wb').write(response.content)
      
-def livy_initiliaze():
+def livy_initialize():
     try:
-        host = 'http://riotous-umbrellabird-livy:8998'
+        host = 'http://columbus-spark-livy:8998'
         data = {'kind': 'spark'}                                                                                              
         headers = {'Content-Type': 'application/json'}                                                                      
         r = requests.post(host + '/sessions', data=json.dumps(data), headers=headers)
@@ -38,7 +38,7 @@ def livy_initiliaze():
         
 def livy_add():
     try:
-        host = 'http://riotous-umbrellabird-livy:8998'                                                                                             
+        host = 'http://columbus-spark-livy:8998'                                                                                             
         headers = {'Content-Type': 'application/json'}
         if location is not None:
             session_url = host + location
