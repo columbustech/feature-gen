@@ -1,5 +1,6 @@
 import React from 'react';
 import Cookies from 'universal-cookie';
+import CDrivePathSelector from './CDrivePathSelector.js';
 import axios from 'axios';
 
 class App extends React.Component {
@@ -7,9 +8,15 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
+      activeStepIndex: 0,
+      inputPath: "",
+      outputPath: "",
+      isExecuting: false,
       specs: {}
     };
     this.getSpecs = this.getSpecs.bind(this);
+    this.onInputSelect = this.onInputSelect.bind(this);
+    this.onOutputSelect = this.onOutputSelect.bind(this);
     this.authenticateUser = this.authenticateUser.bind(this);
   }
   getSpecs() {
@@ -68,6 +75,52 @@ class App extends React.Component {
       );
     }
   }
+  onInputSelect(path) {
+    const data = new FormData();
+    data.append('input_path', path);
+    const cookies = new Cookies();
+    var auth_header = 'Bearer ' + cookies.get('fg_token');
+    this.setState({
+      isExecuting: true,
+      activeStepIndex: this.state.activeStepIndex + 1
+    });
+    const request = axios({
+      method: 'POST',
+      url: this.state.specs.cdriveUrl + "app/" + this.state.specs.username + "/feature-gen/api/execute/",
+      data: data,
+      headers: {'Authorization': auth_header}
+    });
+    request.then(
+      response => {
+        this.setState({
+          isExecuting: false
+        });
+      },
+    );
+  }
+  onOutputSelect(path) {
+    const data = new FormData();
+    data.append('output_path', path);
+    const cookies = new Cookies();
+    var auth_header = 'Bearer ' + cookies.get('fg_token');
+    this.setState({
+      isExecuting: true,
+      activeStepIndex: this.state.activeStepIndex + 1
+    });
+    const request = axios({
+      method: 'POST',
+      url: this.state.specs.cdriveUrl + "app/" + this.state.specs.username + "/feature-gen/api/save/",
+      data: data,
+      headers: {'Authorization': auth_header}
+    });
+    request.then(
+      response => {
+        this.setState({
+          isExecuting: false
+        });
+      },
+    );
+  }
   render() {
     if (Object.keys(this.state.specs).length === 0) {
       this.getSpecs();
@@ -76,9 +129,35 @@ class App extends React.Component {
       this.authenticateUser();
       return(null);
     } else {
+      let component, header;
+      switch(this.state.activeStepIndex) {
+        case 0:
+          component = (
+            <CDrivePathSelector specs={this.state.specs} primaryFn={this.onInputSelect} 
+              primaryBtn={"Simulate Model"} />
+          );
+          header = (
+            <h1 className="h3 mb-3 font-weight-light">Choose an {"input"} folder {"for"} Feature Gen </h1>
+          );
+          break;
+        case 1:
+          component = (
+            <CDrivePathSelector specs={this.state.specs} primaryFn={this.onOutputSelect}
+              primaryBtn={"Save to CDrive"} />
+          );
+          header = (
+            <h1 className="h3 mb-3 font-weight-light">Choose CDrive {"location for"} saving output</h1>
+          );
+          break
+        default:
+          component = "";
+          header = "";
+      }
       return (
         <div>
           Successfully authenticated user!
+          {header}
+          {component}
         </div>
       );
     }
